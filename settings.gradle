@@ -1,0 +1,2 @@
+rootProject.name='CustomContentProvider'
+include ':app'

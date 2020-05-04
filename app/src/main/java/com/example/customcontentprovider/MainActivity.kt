@@ -11,14 +11,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var rs = contentResolver.query(
+        //Cursor
+        //(検索したいURI, 抽出したい項目, 絞り込み条件, 絞り込みパラメータ, ソート)
+        val rs = contentResolver.query(
             AcronymProvider.CONTENT_URI,
-            arrayOf(AcronymProvider._ID, AcronymProvider.NAME, AcronymProvider.MEANING),
+            arrayOf(AcronymProvider.ID, AcronymProvider.NAME, AcronymProvider.MEANING),
             null,
             null,
             AcronymProvider.NAME
         )
 
+        /**
+         * Cursorを次へ
+         */
         button.setOnClickListener {
             if (rs?.moveToNext()!!) {
                 editText.setText(rs.getString(1))
@@ -26,6 +31,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /**
+         * Cursorを前へ
+         */
         button2.setOnClickListener {
             if (rs?.moveToPrevious()!!) {
                 editText.setText(rs.getString(1))
@@ -33,16 +41,22 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /**
+         * 項目を挿入
+         */
         button3.setOnClickListener {
-            var cv = ContentValues()
+            val cv = ContentValues()
             cv.put(AcronymProvider.NAME, editText.text.toString())
             cv.put(AcronymProvider.MEANING, editText2.text.toString())
             contentResolver.insert(AcronymProvider.CONTENT_URI, cv)
             rs?.requery()
         }
 
+        /**
+         * 項目を更新
+         */
         button4.setOnClickListener {
-            var cv = ContentValues()
+            val cv = ContentValues()
             cv.put(AcronymProvider.MEANING, editText2.text.toString())
             contentResolver.update(
                 AcronymProvider.CONTENT_URI,
@@ -53,7 +67,9 @@ class MainActivity : AppCompatActivity() {
             rs?.requery()
         }
 
-
+        /**
+         * 項目を削除
+         */
         button5.setOnClickListener {
             contentResolver.delete(
                 AcronymProvider.CONTENT_URI,
@@ -63,9 +79,13 @@ class MainActivity : AppCompatActivity() {
             rs?.requery()
         }
 
+        /**
+         * 項目を空に
+         */
         button6.setOnClickListener {
             editText.setText("")
             editText2.setText("")
+            //editTextにフォーカスを当てる
             editText.requestFocus()
         }
 

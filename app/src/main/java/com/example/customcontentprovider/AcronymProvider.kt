@@ -9,19 +9,19 @@ import android.net.Uri
 class AcronymProvider : ContentProvider() {
 
     companion object {
-        val PROVIDER_NAME = "com.example.customcontentprovider/AcronymProvider"
-        val URL = "contact://$PROVIDER_NAME/ACTABLE"
-        val CONTENT_URI = Uri.parse(URL)
+        private const val PROVIDER_NAME = "com.example.customcontentprovider/AcronymProvider"
+        private const val URL = "contact://$PROVIDER_NAME/ACTABLE"
+        val CONTENT_URI: Uri = Uri.parse(URL)
 
-        val _ID = "_id"
-        val NAME = "NAME"
-        val MEANING = "MEANING"
+        const val ID = "id"
+        const val NAME = "NAME"
+        const val MEANING = "MEANING"
     }
 
     lateinit var db: SQLiteDatabase
 
     override fun onCreate(): Boolean {
-        var helper = MyHelper(context)
+        val helper = MyHelper(context)
         db = helper.writableDatabase
         return if (db == null) false else true
     }
@@ -38,13 +38,13 @@ class AcronymProvider : ContentProvider() {
         condition: String?,
         condition_val: Array<out String>?
     ): Int {
-        var count = db.update("ACTABLE", cv, condition, condition_val)
+        val count = db.update("ACTABLE", cv, condition, condition_val)
         context?.contentResolver?.notifyChange(uri, null)
         return count
     }
 
     override fun delete(uri: Uri, condition: String?, condition_val: Array<out String>?): Int {
-        var count = db.delete("ACTABLE", condition, condition_val)
+        val count = db.delete("ACTABLE", condition, condition_val)
         context?.contentResolver?.notifyChange(uri, null)
         return count
     }
